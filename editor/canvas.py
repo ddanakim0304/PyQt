@@ -1,4 +1,3 @@
-
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QPainter, QImage, QPen
@@ -12,6 +11,7 @@ class Canvas(QWidget):
         self.drawing = False
         self.pen_color = Qt.black
         self.pen_size = 1
+        self.composition_mode = QPainter.CompositionMode_SourceOver
         
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -70,11 +70,13 @@ class Canvas(QWidget):
     def draw_point(self, point):
         if point:
             painter = QPainter(self.image)
+            painter.setCompositionMode(self.composition_mode)
             painter.setPen(QPen(self.pen_color, self.pen_size))
             painter.drawPoint(point)
         
     def draw_line(self, start, end):
         painter = QPainter(self.image)
+        painter.setCompositionMode(self.composition_mode)
         painter.setPen(QPen(self.pen_color, self.pen_size))
         painter.drawLine(start, end)
         self.update()

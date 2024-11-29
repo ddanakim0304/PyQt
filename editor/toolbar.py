@@ -33,7 +33,6 @@ class ToolBar(QToolBar):
         self.pen_action.setChecked(False)
         self.eraser_action.setChecked(True)
         self.parent().canvas.pen_color = QColor(255, 255, 255, 0)
-        # Set composition mode for erasing
         self.parent().canvas.composition_mode = QPainter.CompositionMode_Clear
         
         
@@ -41,5 +40,4 @@ class ToolBar(QToolBar):
         self.eraser_action.setChecked(False)
         self.pen_action.setChecked(True)
         self.parent().canvas.pen_color = Qt.black
-        # Reset composition mode for normal drawing
         self.parent().canvas.composition_mode = QPainter.CompositionMode_SourceOver
