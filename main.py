@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QShortcut
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QKeySequence
 from editor.canvas import Canvas
 from editor.toolbar import ToolBar
 from editor.color_picker import ColorPicker
@@ -20,6 +21,10 @@ class SpriteEditor(QMainWindow):
         self.setCentralWidget(self.canvas)
         self.addToolBar(self.toolbar)
         self.addDockWidget(Qt.RightDockWidgetArea, self.color_picker)
+
+        # Shortcuts
+        QShortcut(QKeySequence.Undo, self).activated.connect(self.canvas.undo)
+        QShortcut(QKeySequence.Redo, self).activated.connect(self.canvas.redo)
 
 def main():
     app = QApplication(sys.argv)
