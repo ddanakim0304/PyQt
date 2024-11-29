@@ -34,8 +34,10 @@ class Canvas(QWidget):
     def mouseMoveEvent(self, event):
         if self.drawing:
             current_point = self.convert_to_image_coords(event.pos())
-            self.draw_line(self.last_point, current_point)
-            self.last_point = current_point
+            if current_point and self.last_point:
+                self.draw_line(self.last_point, current_point)
+                self.last_point = current_point
+                self.update()
             
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -66,10 +68,10 @@ class Canvas(QWidget):
         return QPoint(x, y)
         
     def draw_point(self, point):
-        painter = QPainter(self.image)
-        painter.setPen(QPen(self.pen_color, self.pen_size))
-        painter.drawPoint(point)
-        self.update()
+        if point:
+            painter = QPainter(self.image)
+            painter.setPen(QPen(self.pen_color, self.pen_size))
+            painter.drawPoint(point)
         
     def draw_line(self, start, end):
         painter = QPainter(self.image)
