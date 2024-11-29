@@ -1,5 +1,8 @@
 # Sprite Editor
 
+![final_sprite_gif](https://github.com/user-attachments/assets/02858b31-ad3b-41c2-b69e-58e4dc2ad1ab)
+
+
 In attempt to learn PyQt, I developed a simple pixel art editor built with PyQt5.
 
 ## Features:
