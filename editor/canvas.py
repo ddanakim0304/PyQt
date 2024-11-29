@@ -12,9 +12,44 @@ class Canvas(QWidget):
         self.pen_color = Qt.black
         self.pen_size = 1
         self.composition_mode = QPainter.CompositionMode_SourceOver
-        
+
+        # Add undo/redo stacks
+        self.undo_stack = []
+        self.redo_stack = []
+        self.save_state()  # Save initial state
+
+    def save_state(self):
+        """Save current state for undo"""
+        self.undo_stack.append(self.image.copy())
+        self.redo_stack.clear()
+        # Enable/disable undo/redo buttons
+        if hasattr(self.parent(), 'toolbar'):
+            self.parent().toolbar.undo_action.setEnabled(True)
+            self.parent().toolbar.redo_action.setEnabled(False)
+
+    def undo(self):
+        if len(self.undo_stack) > 1:
+            self.redo_stack.append(self.undo_stack.pop())
+            self.image = self.undo_stack[-1].copy()
+            self.update()
+            # Update button states
+            self.parent().toolbar.undo_action.setEnabled(len(self.undo_stack) > 1)
+            self.parent().toolbar.redo_action.setEnabled(True)
+
+    def redo(self):
+        if self.redo_stack:
+            self.undo_stack.append(self.redo_stack.pop())
+            self.image = self.undo_stack[-1].copy()
+            self.update()
+            # Update button states
+            self.parent().toolbar.undo_action.setEnabled(True)
+            self.parent().toolbar.redo_action.setEnabled(bool(self.redo_stack))
+
     def paintEvent(self, event):
         painter = QPainter(self)
+        # Fill widget background with white
+        painter.fillRect(self.rect(), Qt.white)
+
         # Get the scaled image size for debugging
         scaled_image = self.image.scaled(self.size(), Qt.KeepAspectRatio)
         scaled_size = scaled_image.size()
@@ -42,6 +77,7 @@ class Canvas(QWidget):
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.drawing = False
+            self.save_state()  # Save state after drawing
             
     def convert_to_image_coords(self, pos):
         widget_size = self.size()

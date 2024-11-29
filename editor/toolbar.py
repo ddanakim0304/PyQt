@@ -28,6 +28,20 @@ class ToolBar(QToolBar):
         clear_action = QAction("Clear", self)
         clear_action.triggered.connect(self.parent().canvas.clear_canvas)
         self.addAction(clear_action)
+
+        # Add separator
+        self.addSeparator()
+        
+        # Undo/Redo actions
+        self.undo_action = QAction("Undo", self)
+        self.undo_action.triggered.connect(self.parent().canvas.undo)
+        self.undo_action.setEnabled(False)
+        self.addAction(self.undo_action)
+        
+        self.redo_action = QAction("Redo", self)
+        self.redo_action.triggered.connect(self.parent().canvas.redo)
+        self.redo_action.setEnabled(False)
+        self.addAction(self.redo_action)
             
     def set_eraser_mode(self):
         self.pen_action.setChecked(False)
