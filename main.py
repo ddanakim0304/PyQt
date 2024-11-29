@@ -4,6 +4,7 @@ from PyQt5.QtGui import QKeySequence
 from editor.canvas import Canvas
 from editor.toolbar import ToolBar
 from editor.color_picker import ColorPicker
+from editor.menu import MenuBar
 import sys
 
 class SpriteEditor(QMainWindow):
@@ -16,6 +17,7 @@ class SpriteEditor(QMainWindow):
         self.canvas = Canvas(self)
         self.toolbar = ToolBar(self)
         self.color_picker = ColorPicker(self)
+        self.menu_bar = MenuBar(self)
         
         # Set up layout
         self.setCentralWidget(self.canvas)
