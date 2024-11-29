@@ -3,6 +3,8 @@ from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QPainter, QImage, QPen
 
 class Canvas(QWidget):
+    MAX_HISTORY = 20
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.image = QImage(60, 60, QImage.Format_ARGB32)
@@ -19,9 +21,13 @@ class Canvas(QWidget):
         self.save_state()  # Save initial state
 
     def save_state(self):
-        """Save current state for undo"""
         self.undo_stack.append(self.image.copy())
         self.redo_stack.clear()
+        
+        # Trim undo stack if exceeds limit
+        if len(self.undo_stack) > self.MAX_HISTORY:
+            self.undo_stack.pop(0)  # Remove oldest state
+            
         # Enable/disable undo/redo buttons
         if hasattr(self.parent(), 'toolbar'):
             self.parent().toolbar.undo_action.setEnabled(True)
